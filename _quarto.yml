@@ -4,22 +4,27 @@ project:
 book:
   title: "Statistical Reasoning"
   author: 
-    - "Jane Doe"
+    - "Wouter de Nooy"
     - "Sharon Klinkenberg"
   date: "7/14/2023"
   chapters:
     - index.qmd
-    - intro.qmd
+    - 01-samplingdistr.qmd
+    - 02-probability.qmd
     - summary.qmd
     - references.qmd
 
 bibliography: references.bib
+csl: apa.csl
 
 format:
   html:
     theme: cosmo
-  pdf:
-    documentclass: scrreprt
+    toc-depth: 2
+    toc-location: right
+    number-depth: 2
+  # pdf:
+  #   documentclass: scrreprt
 
 
 

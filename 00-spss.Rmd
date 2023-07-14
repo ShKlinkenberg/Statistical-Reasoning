@@ -1,0 +1,160 @@
+# SPSS Tutorial Videos List {-}
+
+#### Flow chart {-}
+```{r choice-diagram-copy, fig.width=9, echo=FALSE, fig.cap="Flow chart for selecting a test in SPSS."}
+source("flowchart.R")
+p
+rm(p)
+```
+
+#### Chapter \@ref(probmodels): Probability Models: How Do I Get a Sampling Distribution? {-}
+
+(ref:bootstrap1SPSS) Bootstrapping in SPSS.
+
+Figure \@ref(fig:SPSSbootstrap1): (ref:bootstrap1SPSS)
+
+(ref:bootstrap2SPSS) Interpreting bootstrap results in SPSS.
+
+Figure \@ref(fig:SPSSbootstrap2): (ref:bootstrap2SPSS)
+
+(ref:Exact1SPSS) Performing an exact test in SPSS.
+
+Figure \@ref(fig:SPSSExact1): (ref:Exact1SPSS)
+
+(ref:Exact2SPSS) Interpreting exact test results in SPSS.
+
+Figure \@ref(fig:SPSSExact2): (ref:Exact2SPSS)
+
+#### Chapter \@ref(param-estim): Estimating a Parameter: Which Population Values Are Plausible? {-}
+
+(ref:conflevelSPSS) Setting the confidence level in SPSS.
+
+Figure \@ref(fig:SPSSconflevel): (ref:conflevelSPSS)
+
+#### Chapter \@ref(hypothesis): Testing a Null Hypothesis: Am I Right or Am I Wrong? {-}
+
+(ref:binomialSPSS) A binomial test on a single proportion in SPSS.
+
+Figure \@ref(fig:SPSSbinomial): (ref:binomialSPSS)
+
+(ref:chisq1SPSS) A chi-squared test on a frequency distribution in SPSS.
+
+Figure \@ref(fig:SPSSchisq1): (ref:chisq1SPSS)
+
+(ref:1meanSPSS) A one-sample _t_ test in SPSS.
+
+Figure \@ref(fig:SPSS1mean): (ref:1meanSPSS)
+
+#### Chapter \@ref(power): Which Sample Size Do I Need? Power! {-}
+
+(ref:cohendtitle) Obtaining Cohen's _d_ with SPSS.
+
+Figure \@ref(fig:cohend): (ref:cohendtitle)
+
+#### Chapter \@ref(anova): Moderation with Analysis of Variance {-}
+
+(ref:1waySPSS) One-way analysis of variance (ANOVA) in SPSS.
+
+Figure \@ref(fig:SPSS1way): (ref:1waySPSS)
+
+(ref:2waySPSS) Two-way analysis of variance with moderation in SPSS.
+
+Figure \@ref(fig:SPSS2way): (ref:2waySPSS)
+
+(ref:eta2SPSS) Calculating eta^2^ from SPSS output.
+
+Figure \@ref(fig:SPSSeta2): (ref:eta2SPSS)
+
+#### Chapter \@ref(moderationcat): Regression Analysis And A Categorical Moderator {-}
+
+(ref:regsimpleSPSS) Executing and interpreting regression analysis in SPSS.
+
+Figure \@ref(fig:SPSSregsimple): (ref:regsimpleSPSS)
+
+(ref:regdummy2SPSS) Creating dummy variables in SPSS.
+
+Figure \@ref(fig:SPSSregdummy2): (ref:regdummy2SPSS)
+
+(ref:regdummySPSS) Using dummy variables in a regression model in SPSS.
+
+Figure \@ref(fig:SPSSregdummy): (ref:regdummySPSS)
+
+(ref:regassumptSPSS) Checking assumptions for regression models in SPSS.
+
+Figure \@ref(fig:SPSSregassumpt): (ref:regassumptSPSS)
+
+(ref:regpredSPSS) Creating categorical by numerical interaction predictors for regression in SPSS.
+
+Figure \@ref(fig:SPSSregpred): (ref:regpredSPSS)
+
+(ref:regcatmodSPSS) Estimating categorical by numerical moderation with regression in SPSS.
+
+Figure \@ref(fig:SPSSregcatmod): (ref:regcatmodSPSS)
+
+(ref:regmodlinesSPSS) Representing moderation by regression lines in a scatterplot in SPSS.
+
+Figure \@ref(fig:SPSSregmodlines): (ref:regmodlinesSPSS)
+
+(ref:regSupport1SPSS) Checking common support for a predictor at different moderator values in SPSS.
+
+Figure \@ref(fig:SPSSregSupport1): (ref:regSupport1SPSS)
+
+#### Chapter \@ref(moderationcont): Regression Analysis With A Numerical Moderator {-}
+
+(ref:regcenterSPSS) Mean-centering variables for regression analysis in SPSS.
+
+Figure \@ref(fig:SPSSregcenter): (ref:regcenterSPSS)
+
+(ref:reglines2SPSS) Regression lines for a numerical moderator in a scatterplot in SPSS.
+
+Figure \@ref(fig:SPSSreglines2): (ref:reglines2SPSS)
+
+(ref:regSupport2SPSS) Checking common support with a numerical moderator in SPSS.
+
+Figure \@ref(fig:SPSSregSupport2): (ref:regSupport2SPSS)
+
+#### Chapter \@ref(confounder): Regression Analysis And Confounders {-}
+
+(ref:regconfoundSPSS) Identifying confounders with regression in SPSS.
+
+Figure \@ref(fig:SPSSregconfound): (ref:regconfoundSPSS)
+
+#### Chapter \@ref(mediation): Mediation with Regression Analysis {-}
+
+(ref:mediatparSPSS) Estimating a single or parallel mediation model with PROCESS (Model 4).
+
+Figure \@ref(fig:SPSSmediatpar): (ref:mediatparSPSS)
+
+(ref:mediatserialSPSS) Estimating a serial mediation model with PROCESS (Model 6).
+
+Figure \@ref(fig:SPSSmediatserial): (ref:mediatserialSPSS)
+
+(ref:mediatcovSPSS) Estimating a mediation model including covariates with PROCESS.
+
+Figure \@ref(fig:SPSSmediatcov): (ref:mediatcovSPSS)
+
+(ref:pathSPSS) Estimating a path model in SPSS.
+
+Figure \@ref(fig:SPSSpath): (ref:pathSPSS)
+
+#### Appendix: Test Overview {-}
+
+(ref:SPSSLevene) Levene's _F_ test on equal variances in SPSS.
+
+Figure \@ref(fig:SPSSLevene): (ref:SPSSLevene)
+
+(ref:SPSSTindep) Independent samples _t_ test on two means.
+
+Figure \@ref(fig:SPSSTindep): (ref:SPSSTindep)
+
+(ref:SPSSTpaired) Paired samples _t_ test on two means.
+
+Figure \@ref(fig:SPSSTpaired): (ref:SPSSTpaired)
+
+(ref:SPSScorrelation) Test on a correlation.
+
+Figure \@ref(fig:SPSScorrelation): (ref:SPSScorrelation)
+
+(ref:SPSSchisqcross) Chi-squared test on a contingency table (crosstab).
+
+Figure \@ref(fig:SPSSchisqcross): (ref:SPSSchisqcross)

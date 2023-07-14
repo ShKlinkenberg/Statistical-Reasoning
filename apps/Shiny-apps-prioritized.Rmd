@@ -1,0 +1,128 @@
+---
+title: "Shiny apps prioritized"
+author: "Wouter de Nooy"
+date: "24 July 2017"
+output: 
+  html_document:
+    number_sections : TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, eval = TRUE)
+```
+
+# regression-sampling
+
+Section 8.1.5, Sampling distributions and assumptions.
+
+```{r regression-sampling, fig.cap="What happens to regression lines from sample to sample?"}
+# Goal: Understand that regression constant and coefficient(s) have sampling
+# distributions.
+# Generate a population with a weak negative effect (-0.6) of exposure on
+# attitude and exposure, with a sizable error term (so a lot of variation in
+# sample regression lines).
+# Generate a sample (N = 10) and display it in a scatterplot with regression
+# line, labelled with it's unstandardized regression coefficient value. Also
+# plot the sampling distribution for the regression coefficient.
+# Add a button to allow drawing a new sample; display the new sample and new
+# regression line but retain the existing regression lines.
+# Add button (or change sampling button) to draw 1,000 samples: don't display
+# samples, just update sampling distribution with normal (or t) distribution as
+# superimposed curve.
+```
+
+# interaction-var-effect
+
+Section 8.3.2, Interaction variable.
+
+```{r interaction-var-effect, fig.cap="What does an interaction variable do?"}
+# Goal: Intuitive understanding of the effect of an interaction variable.
+# Generate a dataset with 30 observations for the regression model y = 3 -
+# 0.5x_1 + 1.5x_2 + 0.3x_1*x_2 with x_1 in the range [0, 10] and x_2 a dummy (0
+# or 1) with a random uniform component to each parameter in the range [-.1,
+# .1].
+# In a scatterplot of attitude (Y) versus exposure (X), display the regression
+# line (fat, grey) for the equation with x_2 = 0, labelled with the regression
+# equation without the interaction variable. Display smokers and non-smokers
+# with different colours/shapes.
+# Add a select list labeled 'Add product of exposure and smoking status' with
+# the values '--', '0 - Non-smokers', and '1 - Smokers'. Selection of a value
+# adds the corresponding regression line to the plot with the category name and
+# regression equation. (The line for non-smokers is parallel to the fat gray
+# line.)
+# Clicking/hovering over the newly created line shows the slope as a sum of the
+# conditional and interaction effect, e.g., "Slope: 0.5 * exposure + 0.3 * 1 *
+# exposure".
+```
+
+# symmetry-predictor-moderator
+
+Section 8.5.4, Symmetry of predictor and moderator
+Variant of mean-centering-moderator.
+
+```{r symmetry-predictor-moderator, fig.cap=""}
+# Goal: Understand the advantages of mean-centering the predictor by seeing how
+# the reference value changes with mean-centering (and centering on another
+# value, e.g., M plus/minus 1 SD).
+# Use same data set as in app continuous-moderator: predictor = exposure,
+# moderator = contact.
+# Display scatterplot (x axis not labelled) with conditional regression effect
+# for predictor (blue) at moderator value = 0 and conditional effect of
+# moderator (red) for predictor = 0.
+# Show two additional x axes marking the reference values of the predictor
+# (blue) and moderator (red) (range [0, 10], initial value 0).
+# Add sliders 'Exposure - x' and 'Contact - x' (equal length as two x axes,
+# range [0, 10], initial value 0), labeled with values M - SD, M, and M + SD.
+# Adjusting the sliders update the scale of the appropriate x axis (the marked
+# point zero moves) and the regression lines in the scatterplot.
+```
+
+#	replacement
+
+Section 2.1.1, Sampling with and without replacement.
+
+```{r replacement, fig.cap="Sampling with and without replacement."}
+#Create a sample consisting of 10 candies (dots) that are coloured (5 colours)
+#and numbered. Display this sample as a dotplot.
+# Add a button to create three (bootstrap) samples with replacement and a button
+# to create three (bootstrap) samples without replacement.
+# Show the three samples: coloured dots with their ID numbers.
+```
+
+#	bootstrap-ci
+
+Section 3.5.3, Confidence intervals with bootstrapping
+Variant of app bootstrapping.
+
+```{r bootstrap-ci, eval=FALSE, echo=FALSE, fig.cap="How do we construct confidence intervals with bootstrapping?"}
+# Adapt app bootstrapping: Show Initial Sample and Sampling Distribution,
+# buttons Bootstrap 1000 samples and Draw new initial sample. Increase vertical
+# size of sampling distribution but reduce range from 0 to 0.5.
+# Add vertical lines for 95% confidence interval limits calculated from
+# percentiles in the bootstrapped sampling distribution and limits calculated
+# from the standard error (= standard deviation of the bootstrapped sampling
+# distribution) times the critical value 1.96 (using a normal approximation).
+# Finally, display the average of the bootstrapped sampling distribution as well
+# as the true population proportion (0.2).
+```
+
+# reshyp-althyp
+
+Section 5.5, 
+Adapt type1vs2 or https://github.com/alice-i-cecile/power-calculator-toy? 
+
+```{r reshyp-althyp, fig.cap="Sample size calculator."}
+# Adapt app power-calculator-toy
+# (https://github.com/alice-i-cecile/power-calculator-toy).
+# Show sampling distribution (blue) for average candy weight according to
+# research hypothesis (= null hypothesis): 2.8. Colour (blue) the area for not
+# rejecting the null and add 95% as label.
+# Add sampling distribution (red) for true average candy weight with slider to
+# change true population average (range [2, 6], initial value 3.1. different
+# from 2.8. Colour (red) areas above the rejection region and add labels with
+# percentages for areas (rounded).
+# Adjusting the slider changes the location of true sampling distribution, the
+# size of the areas under it representing test power, and associated
+# percentages.
+```
+

@@ -1,0 +1,400 @@
+```{r setup, include=FALSE, echo=FALSE}
+# All code chunks that should never be shown must have the echo=FALSE option.
+# Chunks with answers to exercises have the echo option not set, so their visibility depends on the the echo option set for all chunks here. Set it to FALSE if the answers are always visible.
+knitr::opts_chunk$set(echo=TRUE, warning=FALSE, message=FALSE, eval=TRUE, tidy=TRUE)
+# Set output format for kableExtra tables: "html" or "latex"
+options(knitr.table.format = "latex")
+# Don't show NAs in kable tables.
+options(knitr.kable.NA = "")
+# Libraries used.
+library(tidyverse)
+library(knitr)
+library(kableExtra)
+library(visNetwork)
+library(bookdown)
+library(haven)
+# Basic colors and layout.
+source("apps/plottheme/styling.R")
+# Chunks with answers to Test Your Understanding questions are set to a boolean variable for each chapter, which can be set to TRUE for showing the answers.
+# Show TYU answers per chapter. Change between FALSE and TRUE.
+ch1 <- FALSE
+ch2 <- FALSE
+ch3 <- FALSE
+ch4 <- FALSE
+ch5 <- FALSE
+ch6 <- FALSE
+ch7 <- FALSE
+ch8 <- FALSE
+ch9 <- FALSE
+ch10 <- FALSE
+ch11 <- FALSE
+```
+
+```{r include=FALSE, echo=FALSE, eval=FALSE}
+# Notes
+
+# PDF output:
+#* Embedded shiny apps: Lots of whitespace within the screenshot. Helps to define out.height in chunk - no. cliprect = 'viewport' does not work. selector = "#sampling-distribution-summary1" does not work. vwidth=420, vheight=620 does not work. Setting dev="png" works even though some whitespace remains under the app. Specify out.width (to get a caption) but don't specify out.height (increases the app size).
+#* Interactive network visualizations (flow chart in 4.2 Formulating Statistical Hypotheses, mediation models in 9.6 Path Model with Regression Analysis) badly captured (due to fig.asp="50%"?) with lots of whitespace (and of course no link to interactive version). Adding out.width and/or out.height seems to create new problems (mean-centering of consecutive text, caption rendered as LaTex...). Manual screenshots shown with screenshot.alt = "".
+#* No screen shots for videos embedded with iframe (4.2.9 Comparing Means in SPSS). Also, a separate figure caption is not numbered. Solved by embedding them with knitr::include_url and dev = "png" but this puts videos in a floating context, so they are no longer in the Instructions section in the PDF. 
+#* Manually adjust .tex file: replace \begin{figure} by \begin{figure}[H]. Also apply to tables to stop them from floating. Manual screenshots of videos (with correct file names) in figures\videoshots. Copy all to _book\GentleIntro_files\figure-latex and recompile .tex file. Note: Also copy all files in figure-latex directory from _bookdown_files\GentleIntro_files  to the _book\GentleIntro_files.
+#* Including a manual screen shot with screenshot.alt = "" solves the white-space problem but it does not add a link to the interactive content (shiny app). Only applicable to dynamic networks that have no link anyhow.
+
+#* Only caption to figure if out.width is set.
+#* kable tables are not adjusted to the page margins (see 2.5.2 Conditions for the use of theoretical probability distributions, 9.6.3 Partial and full mediation). out.width="100%" does not help.
+
+#* Equations: use aligned instead of align. But aligned does not work in HTML - need different package to render equations in HTML? 
+#* Equations are numbered with the section number. The number is not displayed with the equation itself.
+
+#* HTML table to arrange text and pictures does not work: 2.1 (baron), 3.5.1 (Neyman), 5.2 (metal detector), 5.3.1 (Pearson), 6.3.2 (Gauss, LaPlace). Size of picture must be made explicit. Embed with knitr::include_graphics and set output.width? Note that include_graphics makes the picture float, which is not what I want with portraits. Also, the dpi seems to matter to eventual out.width of r chunck with include_graphics.
+
+# Links to external resources such as (SPSS) data must be absolute. They cannot be stored in the R Markdown doc root directory, so I store them in a data subdirectory of the shiny server http://82.196.4.233:3838/data. Embed links as HTML with target="_blank" to open the resource in a new window otherwise the Shiny server displays the R Markdown document in grey (must be reloaded).
+
+# Include SPSS tabular output:
+#- Right-click table, select Style Output, Select as Group (Continue), Table Look, Compact.
+#- Select tales to be exported. Don't select separate analysis titles, they are badly formatted.
+#- Right-click selected table and export as HTML, Change Options: Export visible layer only, Export without styling, Include footnotes and captions, Export visible view only.
+#- Export HTML file to R project directory.
+#- Include HTML file in R Markdown within <iframe>. Set width="100%" and experiment to find the right height.
+# Note that html content embedded in this way yields problems with webshot capturing if the document is knitted into PDF. 
+```
+
+```{r example-data, include=FALSE, echo=FALSE, eval=FALSE}
+# Do not overwrite the data files (unless it is really necessary),
+# because data sets may be slightly different from the ones used in the book
+# since R version 4.
+
+source("norm10.R") #function to normalize scores to [1-10] or [0-10]
+
+# SPSS data set candy colour (uniform) and weight (normal, M = 2.8, SD = 0.2), N= 50.
+set.seed(seed = 12345)
+# Candy bags example.
+candies <- data.frame(
+  colour = c(1, 2, 4, 3, 5), 
+  weight = rnorm(50, mean = 2.8, sd = 0.2), 
+  sticky = c(rep(c(2, 2, 1, 2, 1), 6), rep(c(2, 1), 9), c(1, 2)), 
+  colour_pre = rnorm(50, mean = 7.3, sd = 0.5)
+)
+set.seed(seed = 8734)
+candies$colour_post <- candies$colour_pre + ifelse(candies$colour %in% c(1, 2, 3), rnorm(50, mean = -1.1, sd = 0.1), ifelse(candies$colour == 5, rnorm(50, mean = -2.4, sd = 0.2), rnorm(50, mean = -3.7, sd = 0.4)))
+set.seed(seed = 3295)
+candies$sweetness <- 12 - candies$colour_post + rnorm(50, mean = 0, sd = 1.7)
+candies$sweetness <- norm10(candies$sweetness) #normalize to 1-10
+set.seed(seed = 9501)
+candies$help <- runif(50, 0, 1)
+candies$spotted <- ifelse((candies$colour %in% c(1, 2, 4) & candies$help > 0.3) | (candies$colour %in% c(3, 5) & candies$help > 0.7), 2, 1) 
+candies$help <- NULL
+# add labels
+candies <- candies %>%
+  mutate(
+    colour = labelled_spss(colour,
+                           labels = c(`blue` = 1,`green` = 2,`yellow` = 5,`orange`= 3,`red`= 4),
+                           label = "Candy colour"
+    ),
+    weight = labelled_spss(weight,
+                           label = "Candy weight (grams)"
+    ),
+    sticky = labelled_spss(sticky,
+                           labels = c(`not sticky`= 1, `sticky` = 2),
+                           label = "Candy is sticky"
+    ),
+    colour_pre = labelled_spss(colour_pre,
+                               labels = c(`Totally faded` = 1, `Maximum colourfulness` = 10),
+                               label = "Candy colourfulness before exposure to sun light"
+    ),
+    colour_post = labelled_spss(colour_post,
+                                labels = c(`Totally faded` = 1, `Maximum colourfulness` = 10),
+                                label = "Candy colourfulness after exposure to sun light"
+    ),
+    sweetness = labelled_spss(sweetness,
+                              label = "Candy sweetness",
+                              labels = c(`Not a bit sweet` = 1, `Super sweet` = 10),
+    ),
+    spotted = labelled_spss(spotted,
+                            labels = c(`Not spotted` = 1, `Spotted` = 2),
+                            label = "Candy is spotted"
+    )
+  )
+# save as SPSS file
+write_sav(candies, "data/candies.sav")
+
+# Households: tv station reach, region, household income.
+set.seed(2583)
+random <- runif(120)
+households <- data.frame(region = ifelse(random <= 0.2, "North", ifelse(random <= 0.45, "East", ifelse(random <= 0.75, "South", "West"))))
+set.seed(6111)
+random <- runif(120)
+households$tv_reach <- "no"
+households$tv_reach[(households$region == "North" & random < 0.2) | (households$region == "East" & random < 0.7) | (households$region == "South" & random < 0.4) | (households$region == "West" & random < 0.9)] <- "yes"
+households$tv_reach <- factor(households$tv_reach)
+households$income <- rnorm(120, mean = 40000, sd = 12000) + ifelse(households$region == "West" | households$region == "East", runif(120) * 10000, 0)
+attributes(households$region)$label <- "Region of residence"
+attributes(households$tv_reach)$label <- "Can the household receive the tv station?"
+attributes(households$income)$label <- "Household income"
+write_sav(households, "data/households.sav")
+
+# Children: media literacy, sex, age, supervision.
+set.seed(2583)
+n <- 472 # 87
+children <- data.frame(
+  medliter = rnorm(n, mean = 4.3, sd = 1.8), 
+  sex = c(rep(3, round(n * 46 / 87)), rep(2, round(n * 40 / 87)), rep(1, round(n / 87))) # One/some impossible value(s).
+)
+children$medliter <- children$medliter - min(children$medliter) + 1
+children <- children %>%
+  mutate(
+    medliter = case_when(
+      medliter < 0 ~ 0,
+      medliter > 10 ~ 10,
+      TRUE ~ medliter
+    )
+  )
+set.seed(1174)
+children$age <- round((children$medliter + 22 + rnorm(n, mean = 0, sd = 5.1))/3)
+set.seed(3228)
+children$supervision <- (children$medliter + rnorm(n, mean = 0, sd = 3.6))
+children$supervision <- norm10(children$supervision) #normalize to 1-10
+children$supervision[30] <- 25 # Impossible value.
+# Set labels.
+children <- children %>%
+  mutate(
+    medliter = labelled_spss(medliter,
+                             labels = c(`No media literacy at all` = 1, `Maximum media literacy` = 10),
+                             label = "Media literacy"
+    ),
+    sex = labelled_spss(sex,
+                        labels = c(` ` = 1, `boy` = 2, `girl` = 3),
+                        label = "Sex"
+    ),
+    age  = labelled_spss(age,
+                         label = "Age (in years)"
+    ),
+    supervision = labelled_spss(supervision,
+                                labels = c(`Never supervised` = 1, `Supervised all the time` = 10),
+                                label = "Parental supervision during media use"
+    )
+  )
+# attributes(children$sex)$label <- "Sex"
+# attributes(children$age)$label <- "Age (in years)"
+# attributes(children$medliter)$label <- "Media literacy"
+# children$medliter <- labelled::labelled(children$medliter, labels = c(`No media literacy at all` = 1, `Maximum media literacy` = 10))
+# attributes(children$supervision)$label <- "Parental supervision during media use"
+# children$supervision <- labelled::labelled(children$supervision, labels = c(`Never supervised` = 1, `Supervised all the time` = 10))
+haven::write_sav(children, "data/allchildren.sav") # data/children.sav
+
+# Voters: immigrant opinion, age (class: young vs. old).
+set.seed(1324)
+voters <- data.frame(age = round(runif(66) * 70 + 17))
+voters$age_group <- ifelse(voters$age < 30, 2, 1)
+set.seed(2431)
+voters$immigrant <- ifelse(voters$age_group == 2, round(rnorm(66, mean = 5, sd = 1.4)), round(rnorm(66, mean = 5.1, sd = 1.8)))
+voters$immigrant[voters$immigrant < 1] <- 1
+voters$immigrant[voters$immigrant > 10] <- 10
+# add labels
+voters <- voters %>%
+  mutate(
+    age = labelled_spss(age,
+                        label = "Age"
+    ),
+    age_group = labelled_spss(age_group,
+                              labels = c(`young (<30)` = 2, `old (30+)` = 1),
+                              label = "Age group"
+    ),
+    immigrant = labelled_spss(immigrant,
+                              labels = c(`Very hostile towards immigrants` = 1, `Very welcoming to immigrants` = 10),
+                              label = "Attitude towards immigrants"
+    )
+    
+  )
+# save as SPSS file
+haven::write_sav(voters, "data/voters.sav")
+
+# Donors: endorser of the campaign, remember campaign, exposure to campaign, willingness to donate to the campaign (pre and post), sex.
+# Create predictors.
+set.seed(1245)
+remember <- sample(c(0,1), size = 143, replace = TRUE, prob = c(0.5, 0.5))
+set.seed(320)
+exposure <- norm10(rnorm(143, 0, 1))
+sex <- c(rep(0, 71), rep(1, 72))
+endorser <- c(rep(0,22), rep(1,24), rep(2, 25), rep(0,23), rep(1,25), rep(2, 24))
+# Create outcome.
+Clooney <- ifelse(endorser==1, 1, 0)
+Jolie <- ifelse(endorser==2, 1, 0)
+set.seed(1245)
+willing_post <- 3 + 0.84*remember + 0.51*sex + 0.1*exposure + 0.03*Clooney + 1.13*Jolie + 1.23*Clooney*sex - 0.77*Jolie*sex + rnorm(143, 0, 1.48)
+# Create pre-measurement of outcome.
+set.seed(4944)
+willing_pre <- willing_post + runif(143, -0.6, 0.3)
+# Join in dataframe.
+donors <- data.frame(
+  willing_post = labelled_spss(willing_post,
+                               labels = c(`I am very sure not to donate` = 1, `I am very sure to donate` = 10),
+                               label = "Respondent's willingness to donate at the campaign end"), 
+  willing_pre = labelled_spss(willing_pre,
+                              labels = c(`I am very sure not to donate` = 1, `I am very sure to donate` = 10),
+                              label = "Respondent's willingness to donate at the campaign start"), 
+  exposure = labelled_spss(
+    exposure, labels = c(`No exposure` = 1, `Maximum exposure` = 10),
+    label = "Respondent's exposure to the campaign"), 
+  remember = labelled_spss(remember, 
+                           labels = c(`Does not recognize the campaign` = 0, `Recognizes the campaign` = 1),
+                           label = "Respondent remembers the campaign?"),
+  endorser = labelled_spss(endorser, 
+                           labels = c(`Nobody` = 0, `George Clooney` = 1, `Angelina Jolie` = 2),
+                           label = "Celebrity endorsing the campaign"), 
+  sex = labelled_spss(sex, 
+                      labels = c(`Male` = 0, `Female` = 1),
+                      label = "Respondent's sex")
+)
+# Cleanup.
+rm(Clooney, Jolie, willing_post, willing_pre, exposure, remember, endorser, sex)
+write_sav(donors, "data/donors.sav")
+# Note: Set factors to nominal scale in SPSS.
+
+#Consumers: brand awareness, ad exposure, word of mouth, gender (and intention to buy).
+set.seed(834)
+n <- 520 #62
+consumers <- data.frame(
+  ad_expo = norm10(sqrt(abs(rnorm(n, 10, 4.8)))), 
+  wom = c(rep(2, round(n * 18 / 62)), rep(1, round(n * 44 / 62))), 
+  gender = c(rep(1, round(n * 12 / 62)), rep(2, round(n * 6 / 62)), rep(1, round(n * 19 / 62)), rep(2, round(n * 25 / 62))))
+set.seed(825)
+consumers$brand_aw <- norm10(consumers$ad_expo - as.integer(consumers$gender) * 1.2 - as.integer(consumers$wom) * 1.7 + rnorm(n, 0, 3.3))
+set.seed(426)
+consumers$intention <- norm10(8.4 * consumers$ad_expo + 7.7 * consumers$brand_aw - 1 * consumers$ad_expo * consumers$brand_aw + as.integer(consumers$gender) * 1 - as.integer(consumers$wom) * 0.3 + rnorm(n, 0, 14.3))
+#summary(lm(intention ~ ad_expo*brand_aw + gender, data = consumers))
+#summary(lm(intention ~ scale(ad_expo, scale = F)*scale(brand_aw, scale = F) + gender, data = consumers))
+# add labels
+consumers <- consumers %>%
+  mutate(
+    ad_expo = labelled_spss(ad_expo,
+                            labels = c(`No exposure to ads` = 1, `Maximum exposure to ads` = 10),
+                            label = "Exposure to brand advertisements"
+    ),
+    wom = labelled_spss(wom,
+                        labels = c(`no` = 1, `yes` = 2),
+                        label = "Heard about the brand by word of mouth?"
+    ),
+    gender = labelled_spss(gender,
+                           labels = c(`female` = 1, `male` = 2),
+                           label = "Consumer's sex"
+    ),
+    brand_aw = labelled_spss(brand_aw,
+                             labels = c(`Does not recognize the brand at all` = 1, `Knows the brand very well` = 10),
+                             label = "Brand awareness"
+    ),
+    intention = labelled_spss(intention,
+                              labels = c(`No intention to buy at all` = 1, `Determined to buy` = 10),
+                              label = "Intention to buy"
+    )
+  )
+# save SPSS data file
+haven::write_sav(consumers, "data/allconsumers.sav") # data/consumers.sav
+
+#Smokers: attitude [-5, 5], exposure [0, 10], (smoking) status [2 or 3 cat.], contact (with smokers) [0, 10].
+set.seed(4932)
+n <- 312 #85
+smokers <- data.frame(exposure = runif(n)*10, status2 = rbinom(n, 1, 0.2))
+smokers$status3[smokers$status2 == 1] <- 2
+set.seed(8220)
+smokers$status3[smokers$status2 != 1] <- rbinom(sum(smokers$status2 != 1), 1, 0.3)
+set.seed(4321)
+smokers$contact <- 0.26*(10 - smokers$exposure) + rnorm(n, mean = 0, sd = 2)
+smokers$contact <- norm10(smokers$contact, lbound1 = FALSE)
+set.seed(390)
+smokers$attitude <- 1.5*(-0.26*smokers$exposure + 
+                           0.03*smokers$exposure*smokers$contact +
+                           -0.8*(smokers$status3 == 1) +
+                           -0.24*smokers$exposure*(smokers$status3 == 1) +
+                           0.7*(smokers$status3 == 2) +
+                           -0.20*smokers$exposure*(smokers$status3 == 2) +
+                           rnorm(n, mean = 1, sd = 0.6))
+# recode values that are too high or too low
+smokers <- smokers %>%
+  mutate(attitude = case_when(
+    attitude < -5 ~ -5,
+    attitude > 5 ~ 5,
+    TRUE ~ attitude
+  ))
+# add labels
+smokers <- smokers %>%
+  mutate(
+    exposure = labelled_spss(exposure,
+                             labels = c(`No exposure` = 0, `Maximum exposure` = 10),
+                             label = "Exposure to anti-smoking campaign"
+    ),
+    status2 = labelled_spss(status2,
+                            labels = c(`Non-smoker` = 0, `Smoker` = 1),
+                            label = "Smoking status"
+    ),
+    status3 = labelled_spss(status3,
+                            labels = c(`Non-smoker` = 0, `Former smoker` = 1, `Smoker` = 2),
+                            label = "Smoking status"
+    ),
+    contact = labelled_spss(contact,
+                            labels = c(`No contact` = 0, `Maximum contact` = 10),
+                            label = "Contact with smokers"
+    ),
+    attitude = labelled_spss(attitude,
+                             labels = c(`Very negative` = -5, `Neutral`= 0, `Very positive` = 5),
+                             label = "Attitude towards smoking"
+    )
+  )
+# save SPSS data file
+haven::write_sav(smokers, "data/allsmokers.sav") # data/smokers.sav
+
+# Readers: Predicting newspaper reading time from news site use, political scepticism, political interest, education level, and age.
+# Age (in decades).
+set.seed(5554)
+readers <- data.frame(age = round(runif(n = 312, min = 1.8, max = 8.2), digits = 1))
+# Education level (in years).
+set.seed(4466)
+readers$education <- round(-readers$age + rnorm(n = 312, mean = 0, sd = 15), digits = 0)
+readers$education <- 8 + round(norm10(readers$education, lbound1 = FALSE), digits = 0)
+# Political interest (10-point scale).
+set.seed(7373)
+readers$polinterest <- round(norm10(0.3*readers$age + 1.2*readers$education + rnorm(n = 312, mean = 0, sd = 6)), digits = 1)
+# Political cynicism (10-point scale).
+set.seed(3737)
+readers$polcynic <- round(norm10(-0.8*readers$age - 1.4*readers$education + rnorm(n = 312, mean = 0, sd = 6)), digits = 1)
+# News site use (7-point scale).
+set.seed(2176)
+readers$newssite <- round(norm10(-8.6*readers$age + 1.4*readers$polinterest + rnorm(n = 312, mean = 0, sd = 6)), digits = 0)
+readers$newssite[readers$newssite == 1] <- 2
+readers$newssite[readers$newssite > 8] <- 8
+readers$newssite <- readers$newssite - 2
+# Newspaper reading time (minutes per day on average).
+set.seed(3310)
+readers$readingtime <- round(4.6*readers$age + 0.3*readers$education + 0.5*readers$polinterest - 0.1*readers$polcynic - 1.3*readers$newssite + rnorm(n = 312, mean = 0, sd = 6), digits = 0) 
+readers$readingtime <- readers$readingtime - min(readers$readingtime)
+# Add labels
+readers <- readers %>%
+  mutate(
+    age = labelled_spss(age,
+                        labels = ,
+                        label = "Age (in decades)"
+    ),
+    education = labelled_spss(education,
+                              labels = ,
+                              label = "Education level (in years)"
+    ),
+    polinterest = labelled_spss(polinterest,
+                                labels = c(`No interest` = 1, `Very much interested` = 10),
+                                label = "Interest in politics (scale)"
+    ),
+    polcynic = labelled_spss(polcynic,
+                             labels = c(`Not cynical at all` = 1, `Very cynical` = 10),
+                             label = "Political cynicism (scale)"
+    ),
+    newssite = labelled_spss(newssite,
+                             labels = c(`Never` = 0, `At most once a week` = 1, `Twice a week` = 2, `Once a day` = 3, `Twice a day` = 4, `Three times a day` = 5, `At least four times a day` = 6),
+                             label = "News sites use"
+    ),
+    readingtime = labelled_spss(readingtime,
+                                labels = ,
+                                label = "Average newspaper reading time per day (minutes)"
+    )
+  )
+# save SPSS data file
+haven::write_sav(readers, "data/readers.sav")
+```

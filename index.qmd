@@ -1,9 +1,25 @@
-# Preface {.unnumbered}
+{{< include setup.qmd >}}
 
-This is a Quarto book.
+# Introduction and Reader's Guide {.unnumbered}
 
-To learn more about Quarto books visit <https://quarto.org/docs/books>.
+In the years that I have been teaching inferential statistics to bachelor students in Communication Science, I have learned two things. First, it is paramount that students thoroughly understand the principles of statistical inference before they can apply statistical inference correctly themselves. Second, formal notation, manual calculation, and estimation details distract rather than help students understand what they are doing. This book offers a non-technical but thorough introduction to statistical inference. It discusses a minimal set of concepts needed to understand both the possibilities and pitfalls of estimation, null hypothesis testing, moderation, and mediation analysis. It uses a minimum of formal notation.
 
-```{r}
-1 + 1
-```
+## Intended Audience and Setting {.unnumbered}
+
+This book is written as reading material for a follow-up course in statistics, in the bachelor of Communication Science at the University of Amsterdam. Students enrolled in this course have passe an introductory course in statistics that explained how to change research questions into variables and associations between variables, how to select and execute the correct analysis or test (in SPSS) to answer their research question, and how to interpret the results in a language that is both comprehensible for the average reader and complying with professional standards (APA standard for reporting test results). In addition, they have learned the very basics of inferential statistics: How to decide which null hypothesis to reject based on reported _p_ values, and how to interpret confidence intervals.  
+
+This book is meant for use in a flipped-classroom setting. Students should read the text, watch embedded videos, and play with the interactive content before they meet in class. Class meetings are used to answer questions raised by the students, do group work to exercise with the concepts and techniques presented in the text, and do short tests to check understanding.  
+
+## Interactive Content {.unnumbered}
+
+The interactive content in this book replaces simulations that used to be demonstrated during lectures. I expect that doing simulations yourself rather than watching them being done by someone else enhances understanding. I have tried to break down the simulations into smaller steps, confronting the student several times with essentially the same simulation, but with added complexity. I hope that this approach enhances understanding and remembrance and, at the same time, avoids frustration caused by complex dashboards offering all options at once. 
+
+## Disclaimer {.unnumbered}
+
+The example data sets have been generated for the purpose of demonstrating statistical techniques. These are not real data and no conclusions should be drawn from the results obtained from the data.
+
+## Acknowledgements {.unnumbered}
+
+Adam Sasiadek developed the more complicated Shiny apps in this book. The College of Communication at the University of Amsterdam generously supported the creation of the apps whereas this university's Grassroots Project for ICT in education refused to support it. Renske van Bronswijk corrected my English. Any remaining errors result from changes and additions that I applied afterwards. My colleague Peter Neijens commented on a draft of this text. Among the first tutors using this book, Chei Billedo, Marcel van Egmond, Matthijs Elenbaas, Andreas Goldberg, Bregje van Groningen, Luzia Helfer, Rhianne Hoek, Laura Jacobs, Jeroen Jonkman, Fam te Poel, Sanne Schinkel, Christin Scholz, Ragnheiður Torfadóttir, Philipp Mendoza, and she whose name I am not allowed to mention offered many suggestions that improved the text substantially. Among the students who helped to improve the book, Alissa Hilbertz stands out for her careful language corrections and suggestions.
+
+<a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>.

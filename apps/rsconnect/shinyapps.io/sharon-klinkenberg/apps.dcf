@@ -1,0 +1,11 @@
+name: apps
+title:
+username:
+account: sharon-klinkenberg
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 9456766
+bundleId: 7457023
+url: https://sharon-klinkenberg.shinyapps.io/apps/
+when: 1689345167.23032
+lastSyncTime: 1689345167.23033
