@@ -2,8 +2,10 @@ project:
   type: book
 
 book:
-  title: "Statistical-Reasoning"
-  author: "Jane Doe"
+  title: "Statistical Reasoning"
+  author: 
+    - "Jane Doe"
+    - "Sharon Klinkenberg"
   date: "7/14/2023"
   chapters:
     - index.qmd
